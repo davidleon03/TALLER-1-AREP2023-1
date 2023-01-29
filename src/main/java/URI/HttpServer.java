@@ -6,7 +6,9 @@ import java.security.PublicKey;
 
 public class HttpServer {
     public static URLreader busquedaAPI;
+    public static CacheAPI cache;
     public static void main(String[] args) throws IOException {
+        cache = new CacheAPI<>(1000,100,500);
         Socket clientSocket = null;
         busquedaAPI = new URLreader();
         ServerSocket serverSocket = null;
@@ -40,14 +42,25 @@ public class HttpServer {
         out.println(outputLine);
     }
     public static void busqueda(Socket clientSocket) throws IOException {
+        String res;
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         String[] datos = in.readLine().split(" ");
         if(datos[0].equals("POST")){
-            String res = busquedaAPI.getAPI(datos[1].substring(1));
-            System.out.println(res);
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            String outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type:  application/json\r\n" + "\r\n" + res;
-            out.println(outputLine);
+            if(cache.get(datos[1].substring(1)) != null){
+                res = "Sacado de cache --> " + (String) cache.get(datos[1].substring(1));
+                System.out.println(res);
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                String outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type:  application/json\r\n" + "\r\n" + res;
+                out.println(outputLine);
+            }
+            else {
+                res = busquedaAPI.getAPI(datos[1].substring(1));
+                System.out.println(res);
+                cache.put(datos[1].substring(1), res);
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                String outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type:  application/json\r\n" + "\r\n" + res;
+                out.println(outputLine);
+            }
         }
 
         in.close();
