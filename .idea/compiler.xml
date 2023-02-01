@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Areptaller" />
-        <module name="TALLER-1-AREP2023-1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TALLER-1-AREP2023-1" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
