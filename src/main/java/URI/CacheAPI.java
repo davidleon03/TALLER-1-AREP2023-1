@@ -1,5 +1,6 @@
 package URI;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.map.LRUMap;
@@ -23,7 +24,12 @@ public class CacheAPI<K, T> {
             this.value = value;
         }
     }
-
+    /**
+     * Contructor del cache
+     * @param timeToLive Tiempo de vida del cache
+     * @param timerInterval Intervalo
+     * @param maxItems Capacidad del cache
+     */
     public CacheAPI(long timeToLive, final long timerInterval, int maxItems) {
         this.timeToLive = timeToLive * 1000;
 
@@ -47,13 +53,21 @@ public class CacheAPI<K, T> {
             t.start();
         }
     }
-
+    /**
+     * Funcion para guardar datos en cache
+     * @param K busqueda realizada
+     * @param T JSON
+     */
     public void put(K key, T value) {
         synchronized (memoryCacheMap) {
             memoryCacheMap.put(key, new MemoryCacheObject(value));
         }
     }
-
+    /**
+     * Funcion para obtener datos de cache
+     * @param K busqueda realizada
+     * @return JSON
+     */
     @SuppressWarnings("unchecked")
     public T get(K key) {
         synchronized (memoryCacheMap) {
@@ -67,19 +81,27 @@ public class CacheAPI<K, T> {
             }
         }
     }
-
+    /**
+     * Funcion para eliminar un dato de cache
+     * @param K busqueda realizada
+     */
     public void remove(K key) {
         synchronized (memoryCacheMap) {
             memoryCacheMap.remove(key);
         }
     }
-
+    /**
+     * Funcion para saber el tamaño del cache
+     * @return size
+     */
     public int size() {
         synchronized (memoryCacheMap) {
             return memoryCacheMap.size();
         }
     }
-
+    /**
+     * Funcion para limpiar el cache
+     */
     @SuppressWarnings("unchecked")
     public void cleanup() {
 

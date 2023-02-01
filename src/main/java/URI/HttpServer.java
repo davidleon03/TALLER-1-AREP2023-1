@@ -35,12 +35,24 @@ public class HttpServer {
             }
         }
     }
+    /**
+     * Funcion generada para mostrar el front de la API
+     * @param clientSocket El socket creado
+     * @return
+     * @throws IOException Exception
+     */
     public static void front(Socket clientSocket) throws IOException {
         String outputLine;
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         outputLine = "HTTP/1.1 200 OK\r\n" + "Content-Type:  text/html\r\n" + "\r\n" + htmlForm();
         out.println(outputLine);
     }
+    /**
+     * Funcion generada para realizar la busqueda de datos en la API
+     * @param clientSocket El socket creado
+     * @return
+     * @throws IOException Exception
+     */
     public static void busqueda(Socket clientSocket) throws IOException {
         String res;
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -65,6 +77,10 @@ public class HttpServer {
 
         in.close();
     }
+    /**
+     * Funcion generada para almacenar el HTML
+     * @return String
+     */
     public static String htmlForm(){
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
